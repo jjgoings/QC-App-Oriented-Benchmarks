@@ -12,9 +12,8 @@ import ansatz, simulator
 from ansatz import PUCCD
 from simulator import Simulator
 
-
 # Create an instance of the Simulator class for noiseless simulations
-ideal_backend = simulator.Simulator()
+ideal_backend = Simulator()
 
 # Initialize an empty list to accumulate simulation data for hydrogen chains of different lengths
 simulation_data = []
@@ -26,6 +25,7 @@ puccd = PUCCD()
 # For the noiseless simulation, we use 10,000 shots.
 # For the statevector simulator, this would be set to None.
 shots = 10_000
+
 
 # Loop over hydrogen chains with different numbers of qubits (from 2 to 4 in this example)
 for num_qubits in range(2, 5):
