@@ -2,17 +2,6 @@
 This script is an example illustrating the process of estimating the accuracy of the pUCCD algorithm on mock hydrogen chains. 
 The script simulates hydrogen chains of different lengths (num_qubits), constructs the corresponding pUCCD circuits, and then computes their expectation values using a noiseless simulation.
 """
-import sys
-
-sys.path[1:1] = ["Dev", "hydrogen-lattice/Dev"]
-sys.path[1:1] = ["../../Dev", "../../Dev", "../../hydrogen-lattice/Dev/"]
-sys.path[1:1] = ["_common", "_common/qiskit", "hydrogen-lattice/_common"]
-sys.path[1:1] = [
-    "../../_common",
-    "../../_common/qiskit",
-    "../../hydrogen-lattice/_common/",
-]
-
 from pathlib import Path
 
 import numpy as np
@@ -24,6 +13,17 @@ import simulator
 from ansatz import PUCCD
 from simulator import Simulator
 import common
+import sys
+
+sys.path[1:1] = ["Dev", "hydrogen-lattice/Dev"]
+sys.path[1:1] = ["../../Dev", "../../Dev", "../../hydrogen-lattice/Dev/"]
+sys.path[1:1] = ["_common", "_common/qiskit", "hydrogen-lattice/_common"]
+sys.path[1:1] = [
+    "../../_common",
+    "../../_common/qiskit",
+    "../../hydrogen-lattice/_common/",
+]
+
 
 # Create an instance of the Simulator class for noiseless simulations
 ideal_backend = simulator.Simulator()
@@ -50,6 +50,7 @@ def compute_energy(circuit, operator, shots):
 directory_path = Path("../_common/instances")
 problems = list(directory_path.glob("**/*.json"))
 solutions = list(directory_path.glob("**/*.sol"))
+
 # Print the list of JSON file paths
 print(f"problem files: {problems}")
 print(f"solution files: {solutions}")
@@ -62,7 +63,6 @@ print(f"num_qubits: {num_qubits}")
 pauli_ops = []
 
 for file_path in problems:
-    print(file_path)
     ops, coefs = common.read_paired_instance(file_path)
 
     hamiltonians = list(zip(ops, coefs))
@@ -70,6 +70,7 @@ for file_path in problems:
     pauli_ops.append(PauliSumOp.from_list(hamiltonians))
 
 # Loop over hydrogen chains with different numbers of qubits (from 2 to 4 in this example)
+# These hydrogen chains are specified via the problem files
 for index, pauli_op in enumerate(pauli_ops):
     print(f"Starting optimization for problem specified in {problems[index]}...")
 
@@ -116,4 +117,3 @@ for index, pauli_op in enumerate(pauli_ops):
 
     for method, value in zip(method_names, values):
         print(f"{method}: {value}")
-
